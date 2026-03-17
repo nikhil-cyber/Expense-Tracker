@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  expenses          Expense[]
+  recurringPayments RecurringPayment[]
+  savingsGoals      SavingsGoal[]
+  creditCards       CreditCard[]
+  accounts          Account[]
+}
+
+model Expense {
+  id          String   @id @default(cuid())
+  amount      Float
+  category    String
+  description String?
+  date        DateTime
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model RecurringPayment {
+  id          String   @id @default(cuid())
+  name        String
+  amount      Float
+  category    String
+  dueDay      Int
+  isActive    Boolean  @default(true)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SavingsGoal {
+  id            String   @id @default(cuid())
+  name          String
+  type          String
+  targetAmount  Float
+  currentAmount Float    @default(0)
+  monthlyTarget Float    @default(0)
+  color         String   @default("#6c63ff")
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model CreditCard {
+  id             String   @id @default(cuid())
+  name           String
+  bank           String
+  balance        Float
+  creditLimit    Float
+  apr            Float
+  minimumPayment Float
+  dueDay         Int
+  color          String   @default("#6c63ff")
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Account {
+  id        String   @id @default(cuid())
+  name      String
+  type      String
+  balance   Float
+  bank      String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
