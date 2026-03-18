@@ -44,6 +44,7 @@ export const EXPENSE_CATEGORIES = [
   'Insurance',
   'Savings',
   'Investments',
+  'Credit Card Payment',
   'Other',
 ];
 
@@ -62,6 +63,7 @@ export const CATEGORY_COLORS: Record<string, string> = {
   Insurance: '#64748b',
   Savings: '#22c55e',
   Investments: '#0ea5e9',
+  'Credit Card Payment': '#f43f5e',
   Other: '#6b7280',
 };
 

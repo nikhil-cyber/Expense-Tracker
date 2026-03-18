@@ -7,11 +7,16 @@ A full-stack personal finance tracking app built with **Next.js 15**, **TypeScri
 ## Features
 
 - **Authentication** — Register/login with JWT-based sessions (httpOnly cookies)
-- **Expense Tracking** — Add, edit, and delete categorized expenses
+- **Expense Tracking** — Add, edit, and delete categorized expenses with optional payment source tracking
+  - Tag each expense as paid from a **bank account** (auto-decrements balance) or charged to a **credit card** (auto-increments card balance)
+  - **Credit Card Payment** category — log a payment to a credit card to reduce its balance, and optionally specify which bank account the funds came from (both balances update automatically)
+  - Filter expenses by month, year, and category with live totals
 - **Recurring Payments** — Track subscriptions and monthly bills
 - **Savings Goals** — Set and monitor savings targets with progress tracking
 - **Credit Cards** — Manage credit card balances, limits, APR, and due dates
-- **Accounts** — Track checking, savings, and other bank accounts
+  - Balances automatically reflect charges and payments logged through the Expenses page
+  - Visualize utilization per card and overall, with Avalanche and Snowball payoff strategies
+- **Accounts** — Track checking, savings, and other bank accounts; balances stay in sync with linked expenses
 - **AI Recommendations** — Rule-based financial insights based on your data
 - **Charts & Analytics** — Visual spending breakdowns via Recharts
 - **Responsive UI** — Mobile-friendly with a collapsible sidebar
@@ -121,7 +126,7 @@ Expense-Tracker/
 │   │   ├── ai/recommendations/
 │   │   ├── auth/         # login, logout, register, me
 │   │   ├── credit-cards/
-│   │   ├── expenses/
+│   │   ├── expenses/     # CRUD + balance sync for accounts & credit cards
 │   │   ├── recurring/
 │   │   └── savings/
 │   ├── dashboard/        # Protected dashboard pages
@@ -142,7 +147,7 @@ Expense-Tracker/
 ├── lib/
 │   ├── auth.ts           # JWT helpers
 │   ├── db.ts             # Prisma client
-│   └── utils.ts
+│   └── utils.ts          # Categories, colors, formatters
 ├── prisma/
 │   └── schema.prisma     # Database schema
 ├── middleware.ts          # Auth middleware (route protection)
@@ -158,6 +163,22 @@ Expense-Tracker/
 |---|---|---|
 | `DATABASE_URL` | Path to the SQLite database file | Yes |
 | `JWT_SECRET` | Secret key used to sign JWT tokens | Yes |
+
+---
+
+## How Credit Card Payments Work
+
+Credit card payments are tracked as expenses, keeping your card balances and account balances in sync automatically.
+
+1. Go to **Expenses** → **Add Expense**
+2. Set the **Category** to `Credit Card Payment`
+3. Under **Which Card**, select the credit card you are paying down — its balance will decrease by the expense amount
+4. Under **Paid From Account** (optional), select the bank account the money came from — its balance will decrease by the same amount
+5. Save — both balances update instantly
+
+Editing or deleting a "Credit Card Payment" expense fully reverses the original balance changes before applying the new ones, so your data always stays consistent.
+
+> **Charging a purchase to a credit card** works differently: select any non-payment category, then choose the card under **Paid With**. This *increases* the card balance (you owe more), which is the expected behavior for a new charge.
 
 ---
 

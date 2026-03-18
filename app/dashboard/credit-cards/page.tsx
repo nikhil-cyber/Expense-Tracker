@@ -30,8 +30,8 @@ export default function CreditCardsPage() {
 
   async function fetchCards() {
     setLoading(true);
-    const res = await fetch('/api/credit-cards');
-    setCards(await res.json());
+    const cardRes = await fetch('/api/credit-cards');
+    setCards(await cardRes.json());
     setLoading(false);
   }
 
@@ -209,7 +209,7 @@ export default function CreditCardsPage() {
 
                   <div className="flex gap-2 pt-1">
                     <button onClick={() => openEdit(card)} className="btn-secondary flex-1 justify-center text-xs py-2">Edit</button>
-                    <button onClick={() => handleDelete(card.id)} className="btn-danger flex-1 text-xs py-2">Remove</button>
+                    <button onClick={() => handleDelete(card.id)} className="btn-danger text-xs py-2 px-3">Remove</button>
                   </div>
                 </div>
               </div>
@@ -271,7 +271,7 @@ export default function CreditCardsPage() {
         </div>
       )}
 
-      {/* Modal */}
+      {/* Add/Edit Card Modal */}
       {showForm && (
         <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) setShowForm(false); }}>
           <div className="modal-content p-6">
